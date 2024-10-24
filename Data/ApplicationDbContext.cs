@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using mvc.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace mvc.Data;
@@ -9,4 +10,6 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
+
+    public DbSet<Client> Clients {get; set; } = default ;
 }

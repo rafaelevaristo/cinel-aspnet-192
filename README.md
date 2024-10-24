@@ -28,4 +28,5 @@ dotnet new mvc : create a new project based on MVC dotnet template
 
 --auth individual : use the Individual account template option for MVC. This will add the Identity to mvc template. Check the template options using the respective command .
 
-
+#### Install Entity Framework Core tools reference - .NET Core CLI
+CLI EF : https://learn.microsoft.com/en-us/ef/core/cli/dotnet
