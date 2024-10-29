@@ -1,0 +1,51 @@
+@model mvc.Models.Client
+
+@*
+
+testes de cenas
+
+*@
+
+
+<h1>Create new client</h1>
+<div class="row">
+    <div class="col-4">
+        <form asp-action="Create">
+            <div class="form-group">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Birthday" class="form-label"></label>
+                <input asp-for="Birthday" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="form-label"></label>
+                <input asp-for="Address" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="VATNumber" class="form-label"></label>
+                <input asp-for="VATNumber" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="AdmissionDate" class="form-label"></label>
+                <input asp-for="AdmissionDate" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="DeactivationDate" class="form-label"></label>
+                <input asp-for="DeactivationDate" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="CellPhoneNumber" class="form-label"></label>
+                <input asp-for="CellPhoneNumber" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
