@@ -18,8 +18,9 @@ public class ClientController : Controller
     }
 
     public IActionResult Index()
-    {
-        return View();
+    {        
+        IEnumerable<Client> clients = _context.Clients.ToList();              
+        return View(clients);
     }
 
     [HttpGet]
@@ -27,7 +28,6 @@ public class ClientController : Controller
     {
         return View();
     }
-
 
     [HttpPost]
     public IActionResult Create(Client newClient)
@@ -46,10 +46,56 @@ public class ClientController : Controller
         return View();
     }
 
-    public IActionResult Update()
+    [HttpGet]
+    public IActionResult Edit(int id)
     {
-        return View();
+        Client? client = _context.Clients.Find(id);
+
+        if (client is null) 
+        {
+            return NotFound();
+        } 
+        
+        return View(client);
     }
+
+    [HttpPost]
+    public IActionResult Edit(Client clientToUpdate)
+    {
+
+    //var dbClient = _context.Clients.Find(clientToUpdate.ID);
+
+       
+    try{
+
+        _context.Clients.Update(clientToUpdate);
+        _context.SaveChanges();
+
+       }
+       catch (Exception ex){
+        //return NotFound();
+
+        return BadRequest();
+
+       }
+       
+       return RedirectToAction(nameof(Index));
+    }
+
+
+    [HttpGet]
+    public IActionResult Details(int id)
+    {
+        Client? client = _context.Clients.Find(id);
+
+        if (client is null) 
+        {
+            return NotFound();
+        } 
+
+        return View(client);
+    }
+
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

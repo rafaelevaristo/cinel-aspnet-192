@@ -1,9 +1,60 @@
-@model mvc.Models.Client
+@model IEnumerable<mvc.Models.Client>
+
+
+
 
 @*
-testes de de index
+testes de de index e comentario
 *@
 
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Birthday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CellPhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VATNumber)
+            </th>
+            <th>
+                Edit Record
+            </th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (Client client in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => client.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => client.Birthday)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => client.CellPhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => client.VATNumber)
+                </td>
+                <td>
+                    <a asp-area="" asp-action="Details" asp-controller="Client" asp-route-id="@client.ID" class="btn btn-primary">Details</a>
+                    <a asp-area="" asp-action="Edit" asp-controller="Client" asp-route-id="@client.ID" class="btn btn-primary">Edit</a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
 <div class="row">
     <div class="col-4">
         <a asp-controller="Client" asp-action="Create">Create new</a>

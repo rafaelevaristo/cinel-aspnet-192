@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace mvc.Models;
@@ -17,6 +18,7 @@ public class Client{
     [Required]
     public string Address { get; set; }
     
+    [DisplayName("VAT")]
     [Required]
     public string VATNumber { get; set; }    
     
@@ -24,6 +26,7 @@ public class Client{
     
     public DateTime DeactivationDate { get; set; }
     
+    [DisplayName("Celphone")]
     public string? CellPhoneNumber { get; set; }
     [EmailAddress]
     [Required]
