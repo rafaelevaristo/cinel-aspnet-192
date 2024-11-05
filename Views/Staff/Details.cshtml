@@ -1,4 +1,4 @@
-@model mvc.Models.Client
+@model mvc.Models.Staff
 
 @*
 
@@ -7,45 +7,50 @@ testes de cenas
 *@
 
 
-<h1>Display client</h1>
+<h1>Editing client @Model.ID</h1>
 <div class="row">
     <div class="col-4">
-        <form asp-action="Delete" method="post">
+        <div>
             <div class="form-group">
-                <label asp-for="Name" class="form-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <label asp-for="Name" class="form-label"></label>                
+                <div>@Html.DisplayFor(modelItem => Model.Name)</div>
+                
+            </div>
+            <div class="form-group">
+                <label asp-for="StaffNumber" class="form-label"></label>                
+                <div>@Html.DisplayFor(modelItem => Model.StaffNumber)</div>                
             </div>
             <div class="form-group">
                 <label asp-for="Birthday" class="form-label"></label>
-                <input asp-for="Birthday" class="form-control" />
+                <div>@Html.DisplayFor(modelItem => Model.Birthday)</div>
             </div>
             <div class="form-group">
                 <label asp-for="Address" class="form-label"></label>
-                <input asp-for="Address" class="form-control" />
+                <div>@Html.DisplayFor(modelItem => Model.Address)</div>
             </div>
             <div class="form-group">
                 <label asp-for="VATNumber" class="form-label"></label>
-                <input asp-for="VATNumber" class="form-control" />
+                <div>@Html.DisplayFor(modelItem => Model.VATNumber)</div>
             </div>
             <div class="form-group">
                 <label asp-for="AdmissionDate" class="form-label"></label>
-                <input asp-for="AdmissionDate" class="form-control" />
+                <div>@Html.DisplayFor(modelItem => Model.AdmissionDate)</div>
             </div>
             <div class="form-group">
                 <label asp-for="DeactivationDate" class="form-label"></label>
-                <input asp-for="DeactivationDate" class="form-control" />
+                <div>@Html.DisplayFor(modelItem => Model.DeactivationDate)</div>
             </div>
             <div class="form-group">
                 <label asp-for="CellPhoneNumber" class="form-label"></label>
-                <input asp-for="CellPhoneNumber" class="form-control" />
+                <div>@Html.DisplayFor(modelItem => Model.CellPhoneNumber)</div>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <div>@Html.DisplayFor(modelItem => Model.Email)</div>
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
     </div>
 </div>

@@ -1,4 +1,4 @@
-@model mvc.Models.Client
+@model mvc.Models.Staff
 
 @*
 
@@ -7,17 +7,17 @@ testes de cenas
 *@
 
 
-<h1>Display client</h1>
+<h1>Create new Staff</h1>
 <div class="row">
     <div class="col-4">
-        <form asp-action="Delete" method="post">
+        <form asp-action="Create">
             <div class="form-group">
                 <label asp-for="Name" class="form-label"></label>
                 <input asp-for="Name" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Birthday" class="form-label"></label>
-                <input asp-for="Birthday" class="form-control" />
+                <label asp-for="StaffNumber" class="form-label"></label>
+                <input asp-for="StaffNumber" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Address" class="form-label"></label>
@@ -40,9 +40,16 @@ testes de cenas
                 <input asp-for="CellPhoneNumber" class="form-control" />
             </div>
             <div class="form-group">
+                <label asp-for="Birthday" class="form-label"></label>
+                <input asp-for="Birthday" class="form-control" />
+            </div>
+            <div class="form-group">
                 <label asp-for="Email" class="form-label"></label>
                 <input asp-for="Email" class="form-control" />
             </div>
+
+
+
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" />
             </div>

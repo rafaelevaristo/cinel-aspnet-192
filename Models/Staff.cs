@@ -32,6 +32,7 @@ public class Staff{
     public DateTime DeactivationDate { get; set; }
 
     [Required]
+    [DataType(DataType.Date)]
     public DateOnly Birthday { get; set; }
 
 

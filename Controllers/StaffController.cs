@@ -5,13 +5,13 @@ using mvc.Models;
 
 namespace mvc.Controllers;
 
-public class ClientController : Controller
+public class StaffController : Controller
 {
-    private readonly ILogger<ClientController> _logger;
+    private readonly ILogger<StaffController> _logger;
 
     private readonly ApplicationDbContext _context;
 
-    public ClientController(ILogger<ClientController> logger, ApplicationDbContext context)
+    public StaffController(ILogger<StaffController> logger, ApplicationDbContext context)
     {
         _logger = logger;
         _context = context;
@@ -19,7 +19,7 @@ public class ClientController : Controller
 
     public IActionResult Index()
     {        
-        IEnumerable<Client> clients = _context.Clients.ToList();              
+        IEnumerable<Staff> clients = _context.Staff.ToList();              
         return View(clients);
     }
 
@@ -30,27 +30,10 @@ public class ClientController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(Client newClient)
+    public IActionResult Create(Staff newStaff)
     {
 
-        _context.Clients.Add(newClient);
-
-        _context.SaveChanges();
-
-        return RedirectToAction(nameof(Index));
-    }
-
-    [HttpPost, ActionName("Delete")]
-    public IActionResult DeleteConfirm(int ID)
-    {
-
-        Client? client = _context.Clients.Find(ID);
-
-        if (client is null) 
-        {
-            return NotFound();
-        } 
-        _context.Clients.Remove(client);        
+        _context.Staff.Add(newStaff);
 
         _context.SaveChanges();
 
@@ -58,36 +41,26 @@ public class ClientController : Controller
     }
 
 
-    [HttpGet, ActionName("Delete")]
-    public IActionResult DeleteView(int ID)
+    public IActionResult Delete()
     {
-
-        Client? client = _context.Clients.Find(ID);
-
-        if (client is null) 
-        {
-            return NotFound();
-        } 
-
-        return View(client);
+        return View();
     }
-
 
     [HttpGet]
     public IActionResult Edit(int id)
     {
-        Client? client = _context.Clients.Find(id);
+        Staff? staff = _context.Staff.Find(id);
 
-        if (client is null) 
+        if (staff is null) 
         {
             return NotFound();
         } 
         
-        return View(client);
+        return View(staff);
     }
 
     [HttpPost]
-    public IActionResult Edit(Client clientToUpdate)
+    public IActionResult Edit(Staff staffToUpdate)
     {
 
     //var dbClient = _context.Clients.Find(clientToUpdate.ID);
@@ -95,7 +68,7 @@ public class ClientController : Controller
        
     try{
 
-        _context.Clients.Update(clientToUpdate);
+        _context.Staff.Update(staffToUpdate);
         _context.SaveChanges();
 
        }
@@ -113,14 +86,47 @@ public class ClientController : Controller
     [HttpGet]
     public IActionResult Details(int id)
     {
-        Client? client = _context.Clients.Find(id);
+        Staff? staff = _context.Staff.Find(id);
 
-        if (client is null) 
+        if (staff is null) 
         {
             return NotFound();
         } 
 
-        return View(client);
+        return View(staff);
+    }
+
+
+    [HttpPost, ActionName("Delete")]
+    public IActionResult DeleteConfirm(int ID)
+    {
+
+        Staff? staff = _context.Staff.Find(ID);
+
+        if (staff is null) 
+        {
+            return NotFound();
+        } 
+        _context.Staff.Remove(staff);        
+
+        _context.SaveChanges();
+        
+        return RedirectToAction(nameof(Index));
+    }
+
+
+    [HttpGet, ActionName("Delete")]
+    public IActionResult DeleteView(int ID)
+    {
+
+        Staff? staff = _context.Staff.Find(ID);
+
+        if (staff is null) 
+        {
+            return NotFound();
+        } 
+
+        return View(staff);
     }
 
 

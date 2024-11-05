@@ -1,12 +1,8 @@
-@model IEnumerable<mvc.Models.Client>
-
-
-
+@model IEnumerable<mvc.Models.Staff>
 
 @*
 testes de de index e comentario
 *@
-
 
 <table class="table">
     <thead>
@@ -30,26 +26,26 @@ testes de de index e comentario
 
     </thead>
     <tbody>
-        @foreach (Client client in Model)
+        @foreach (Staff staff in Model)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => client.Name)
+                    @Html.DisplayFor(modelItem => staff.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => client.Birthday)
+                    @Html.DisplayFor(modelItem => staff.Birthday)
                 </td>
 
                 <td>
-                    @Html.DisplayFor(modelItem => client.CellPhoneNumber)
+                    @Html.DisplayFor(modelItem => staff.CellPhoneNumber)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => client.VATNumber)
+                    @Html.DisplayFor(modelItem => staff.VATNumber)
                 </td>
                 <td>
-                    <a asp-area="" asp-action="Details" asp-controller="Client" asp-route-id="@client.ID" class="btn btn-primary">Details</a>
-                    <a asp-area="" asp-action="Edit" asp-controller="Client" asp-route-id="@client.ID" class="btn btn-primary">Edit</a>
-                    <a asp-area="" asp-action="Delete" asp-controller="Client" asp-route-id="@client.ID" class="btn btn-primary">Delete</a>
+                    <a asp-area="" asp-action="Details" asp-controller="Staff" asp-route-id="@staff.ID" class="btn btn-primary">Details</a>
+                    <a asp-area="" asp-action="Edit" asp-controller="Staff" asp-route-id="@staff.ID" class="btn btn-primary">Edit</a>
+                    <a asp-area="" asp-action="Delete" asp-controller="Staff" asp-route-id="@staff.ID" class="btn btn-primary">Delete</a>
                 </td>
 
             </tr>
@@ -58,6 +54,6 @@ testes de de index e comentario
 </table>
 <div class="row">
     <div class="col-4">
-        <a asp-controller="Client" asp-action="Create">Create new</a>
+        <a asp-controller="Staff" asp-action="Create">Create new</a>
     </div>
 </div>
