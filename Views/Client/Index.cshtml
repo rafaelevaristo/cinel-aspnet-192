@@ -24,6 +24,7 @@ testes de de index e comentario
                 @Html.DisplayNameFor(model => model.VATNumber)
             </th>
             <th>
+    using Microsoft.EntityFrameworkCore.Metadata.Internal;
                 Edit Record
             </th>
         </tr>
@@ -61,3 +62,32 @@ testes de de index e comentario
         <a asp-controller="Client" asp-action="Create">Create new</a>
     </div>
 </div>
+
+
+@(
+
+Html.Grid(Model)
+    .Build(
+        columns =>
+        {
+            columns.Add(cli => cli.Name);
+            columns.Add(cli => cli.Birthday);
+            columns.Add(cli => cli.CellPhoneNumber);
+            columns.Add(cli => cli.VATNumber).Sortable(GridSortOrder.Asc);
+            columns.Add(cli => Html.ActionLink("Edit", "Edit", new {id = cli.ID}, new { @class="btn btn-primary"}));
+            columns.Add(cli => Html.ActionLink("Details", "Details", new {id = cli.ID}, new { @class="btn btn-primary"}));
+            columns.Add(cli => Html.ActionLink("Delete", "Delete", new {id = cli.ID}, new { @class="btn btn-primary"}));
+        columns.Add(cli => cli)
+    								.Titled("Actions")
+                    .Encoded(false)
+                    .RenderedAs(cli =>
+                        string.Format("{0} {1}",
+                            $"<a class=\"btn btn-primary\" href=\"/Client/Edit/{cli.ID}\">Edit</a>",
+                            $"<a class=\"btn btn-primary\" href=\"/Client/Delete/{cli.ID}\">Delete</a>"
+                        )
+                    );
+        }
+
+    ).Filterable()
+
+)

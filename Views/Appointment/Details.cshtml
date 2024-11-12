@@ -1,0 +1,56 @@
+﻿@model mvc.Models.Appointment
+
+<h1>Details Appointment</h1>
+
+<hr />
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row">
+    <div class="col-4">
+        <div>
+
+            <div class="form-group">
+                <label asp-for="AppoitmentNumber" class="form-label"></label>
+                 <div>@Html.DisplayFor(modelItem => Model.AppoitmentNumber)</div>                
+                @if(ViewBag.ErrorMessage != null)
+                {
+                    <span class="text-danger">
+                        @ViewBag.ErrorMessage
+                    </span>
+                }
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Date" class="form-label"></label>
+                <div>@Html.DisplayFor(modelItem => Model.Date)</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Time" class="form-label"></label>
+                <div>@Html.DisplayFor(modelItem => Model.Time)</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Staff" class="form-label"></label>
+                <div>@Html.DisplayFor(modelItem => Model.Staff.Name)</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Client" class="form-label"></label>
+                <div>@Html.DisplayFor(modelItem => Model.Client.Name)</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Information" class="form-label"></label>
+                <div>@Html.DisplayFor(modelItem => Model.Information)</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="IsDone" class="form-check-label"></label>
+                <div>@Html.DisplayFor(modelItem => Model.IsDone)</div>
+
+            </div>           
+        </div>
+    </div>
+</div>

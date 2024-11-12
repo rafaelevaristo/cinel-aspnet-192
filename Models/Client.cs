@@ -7,9 +7,11 @@ public class Client{
 
     public required int ID { get; set; }
     
+    [Display(Name="Name")]
     [Required]
     public string Name { get; set; }
     
+    [Display(Name="Birthday")]
     [Required]
     [DataType(DataType.Date)]
     public DateOnly Birthday { get; set; }
@@ -18,7 +20,7 @@ public class Client{
     [Required]
     public string Address { get; set; }
     
-    [DisplayName("VAT")]
+    [Display(Name="VAT")]
     [Required]
     public string VATNumber { get; set; }    
     
@@ -26,7 +28,7 @@ public class Client{
     
     public DateTime DeactivationDate { get; set; }
     
-    [DisplayName("Celphone")]
+    [Display(Name="Celphone")]
     public string? CellPhoneNumber { get; set; }
     [EmailAddress]
     [Required]

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using mvc.Data;
+using NToastNotify;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+
+builder.Services
+    .AddMvc()
+    .AddNToastNotifyToastr(new ToastrOptions()
+    {
+        ProgressBar = true,
+        PositionClass = ToastPositions.TopRight
+    });
 
 var app = builder.Build();
 
@@ -34,6 +44,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseNToastNotify();
+
 
 app.MapControllerRoute(
     name: "default",
