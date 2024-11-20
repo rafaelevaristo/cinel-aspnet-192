@@ -20,7 +20,7 @@
 
             <div class="form-group">
                 <label asp-for="AppoitmentNumber" class="form-label"></label>
-                <input asp-for="AppoitmentNumber" class="form-control" readonly="@(isReadOnly ? "readonly" : null) />
+                <input asp-for="AppoitmentNumber" class="form-control"  />
                 <span asp-validation-for="AppoitmentNumber" class="text-danger"></span>
                 @if(ViewBag.ErrorMessage != null)
                 {
@@ -74,3 +74,21 @@
         </form>
     </div>
 </div>
+
+
+@{
+    string actionName = ViewContext.RouteData.Values["action"]?.ToString()?.ToLower() ?? "";
+}
+
+
+<script type="text/javascript" on-content-loaded="true">
+
+    if ("@actionName" !== "create" && "@actionName" !== "edit")
+    {
+        //Jquery
+        //$('textarea, select, input, input[type=checkbox]').prop('disabled', true);
+
+        // Vanilla JS
+        document.querySelectorAll('textarea, select, input, input[type=checkbox]').forEach((element) => { element.disabled = true; });
+    }
+</script>

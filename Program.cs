@@ -1,23 +1,54 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using mvc.Data;
 using NToastNotify;
+using Microsoft.AspNetCore.Mvc.Razor;
+
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+    //options.UseSqlite(connectionString)
+    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddControllersWithViews();
+        //.AddRazorRuntimeCompilation();
+
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+// Localization configuration
+const string defaultCulture = "pt";
+
+CultureInfo enCI = new CultureInfo(defaultCulture);
+
+var supportedCultures = new[]
+{
+    enCI,
+    new CultureInfo("pt"),
+    new CultureInfo("es")
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture(defaultCulture);
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
 
 builder.Services
     .AddMvc()
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
     .AddNToastNotifyToastr(new ToastrOptions()
     {
         ProgressBar = true,
@@ -39,14 +70,18 @@ else
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseNToastNotify();
+app.UseRequestLocalization(
+    app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value
+);
 
+app.UseNToastNotify();
 
 app.MapControllerRoute(
     name: "default",

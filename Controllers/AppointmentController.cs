@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using NToastNotify;
 
+using Microsoft.AspNetCore.Mvc.Localization;
+
+
 namespace mvc.Controllers
 {
     public class AppointmentController : Controller
@@ -14,13 +17,16 @@ namespace mvc.Controllers
         private readonly IToastNotification _toastNotification;
 
         private readonly ApplicationDbContext _context;
+        private readonly IHtmlLocalizer<Resource> _sharedLocalizer ;
 
         public AppointmentController(ILogger<AppointmentController> logger,
                                     IToastNotification toastNotification,
+                                    IHtmlLocalizer<Resource> localizer,
                                     ApplicationDbContext context)
         {
             _logger = logger;
             _toastNotification = toastNotification;
+            _sharedLocalizer = localizer;
             _context = context;
         }
 
@@ -31,6 +37,7 @@ namespace mvc.Controllers
                                                             .Include(ap => ap.Client)
                                                             .Include(ap => ap.Staff)
                                                             .ToList();
+
             return View(appointments);
         }
 
@@ -83,12 +90,16 @@ namespace mvc.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "This Appointment Number is already used! Please insert a new one.";
+                    ViewBag.ErrorMessage = _sharedLocalizer["ErrorAppointementRepeated"];
                 }
             }
             _toastNotification.AddErrorToastMessage($"Error while schedulling Appointment #{appointment.AppoitmentNumber}.");
             ViewBag.ClientList = new SelectList(_context.Clients, "ID", "Name");
             ViewBag.StaffList = new SelectList(_context.Staff, "ID", "Name");
+
+
+            ViewBag.ErrorMessage = _sharedLocalizer["ErrorAppointementDataNotValid"];
+
             return View(appointment);
         }
 
