@@ -173,7 +173,7 @@ namespace mvc.Controllers
 
 
         [HttpGet, ActionName("Delete")]
-        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
+        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN}")]
         public IActionResult DeleteView(int ID)
         {
 
