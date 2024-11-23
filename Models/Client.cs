@@ -8,20 +8,20 @@ public class Client{
     public required int ID { get; set; }
     
     [Display(Name="Name")]
-    [Required]
+    [Required(ErrorMessage = "RequiredErrorMessage")] // Necessario colocar en todos para se ter tradução
     public string Name { get; set; }
     
     [Display(Name="Birthday")]
-    [Required]
+    [Required(ErrorMessage = "RequiredErrorMessage")] // Necessario colocar en todos para se ter tradução
     [DataType(DataType.Date)]
     public DateOnly Birthday { get; set; }
     
     [StringLength(100)]
-    [Required]
+    [Required(ErrorMessage = "RequiredErrorMessage")] // Necessario colocar en todos para se ter tradução
     public string Address { get; set; }
     
     [Display(Name="VAT")]
-    [Required]
+    [Required(ErrorMessage = "RequiredErrorMessage")] // Necessario colocar en todos para se ter tradução
     public string VATNumber { get; set; }    
     
     public DateTime AdmissionDate { get; set; }
@@ -31,7 +31,7 @@ public class Client{
     [Display(Name="Celphone")]
     public string? CellPhoneNumber { get; set; }
     [EmailAddress]
-    [Required]
+    [Required(ErrorMessage = "RequiredErrorMessage")] // Necessario colocar en todos para se ter tradução
     public string Email { get; set; }
 
 }

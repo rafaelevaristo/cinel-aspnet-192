@@ -2,9 +2,12 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Schedule new @sharedLocalizer["Appointment"] XXXXX</a>
-</p>
+
+@if(!User.IsInRole(MVCConstants.ROLES.DRIVER)){
+    <p>
+        <a asp-action="Create">Schedule new @sharedLocalizer["Appointment"] XXXXX</a>
+    </p>
+}
 
 @(
 Html.Grid(Model)

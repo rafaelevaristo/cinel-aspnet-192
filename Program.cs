@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Razor;
 
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using mvc;
+using SQLitePCL;
+using mvc.Data.SeedDataBase;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +20,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<IdentityUser>(
+    options =>{ 
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireDigit = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequiredLength = 4;
+        options.Password.RequiredUniqueChars = 4;
+    
+    }
+    
+    
+    )
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
@@ -49,6 +65,11 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 builder.Services
     .AddMvc()
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    // è necessario que exista a data notation no modelo senão não vai traduzir
+    .AddDataAnnotationsLocalization(options =>
+    {
+            options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(Resource)) ;
+    })
     .AddNToastNotifyToastr(new ToastrOptions()
     {
         ProgressBar = true,
@@ -88,4 +109,19 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+
+SeedDB(); // Executed every time the application restarts
+
 app.Run();
+
+void SeedDB()
+{
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+
+    var dbContext = services.GetRequiredService<ApplicationDbContext>();
+    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+    SeedDatabase.Seed(dbContext, userManager, roleManager);
+}

@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mvc.Data;
 using mvc.Models;
 
 namespace mvc.Controllers;
 
+[Authorize]
 public class StaffController : Controller
 {
     private readonly ILogger<StaffController> _logger;

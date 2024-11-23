@@ -1,12 +1,15 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mvc.Data;
 using mvc.Models;
 
 namespace mvc.Controllers;
 
+[Authorize]
 public class ClientController : Controller
 {
+  
     private readonly ILogger<ClientController> _logger;
 
     private readonly ApplicationDbContext _context;

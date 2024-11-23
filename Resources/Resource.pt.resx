@@ -149,4 +149,8 @@
     <value>Os dados não são validos. Pfv verifique os dados.</value>
     <comment>.</comment>
   </data>
+  <data name="Birthday" xml:space="preserve">
+    <value>Aniversario</value>
+    <comment>.</comment>
+  </data>
 </root>

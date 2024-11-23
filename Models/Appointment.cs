@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace mvc.Models;
@@ -8,6 +9,8 @@ public class Appointment{
 
     public int ID { get; set; }    
 
+    [Remote(action: "IsNotRepeatedAppointmentNumber", controller: "Appointment", ErrorMessage = "ErrorRepeatedAppointmentNumber")]
+    [Required(ErrorMessage = "RequiredErrorMessage")] // Necessario colocar en todos para se ter tradução
     public string AppoitmentNumber { get; set; }
 
     [Display(Name="Date")]

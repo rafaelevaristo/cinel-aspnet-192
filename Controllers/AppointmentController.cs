@@ -7,10 +7,13 @@ using System.Collections.Generic;
 using NToastNotify;
 
 using Microsoft.AspNetCore.Mvc.Localization;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace mvc.Controllers
 {
+    [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE},{MVCConstants.ROLES.DRIVER}")]
     public class AppointmentController : Controller
     {
         private readonly ILogger<AppointmentController> _logger;
@@ -62,6 +65,7 @@ namespace mvc.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
         public IActionResult Create()
         {
             ViewBag.ClientList = new SelectList(_context.Clients, "ID", "Name");
@@ -71,6 +75,7 @@ namespace mvc.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
         public IActionResult Create(Appointment appointment)
         {
             if (ModelState.IsValid)
@@ -104,6 +109,7 @@ namespace mvc.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
         public IActionResult Edit(int ID)
         {
             Appointment? appointment = _context.Appointment.Find(ID);
@@ -122,6 +128,7 @@ namespace mvc.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
         public IActionResult Edit(Appointment appointmentToUpdate)
         {
 
@@ -144,6 +151,7 @@ namespace mvc.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
         public IActionResult DeleteConfirm(int ID)
         {
 
@@ -165,6 +173,7 @@ namespace mvc.Controllers
 
 
         [HttpGet, ActionName("Delete")]
+        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
         public IActionResult DeleteView(int ID)
         {
 
@@ -179,5 +188,22 @@ namespace mvc.Controllers
 
             return View(appointment);
         }
+
+        [AcceptVerbs("GET","POST")]
+        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
+        public IActionResult IsNotRepeatedAppointmentNumber(string appointmentNumber)
+        {
+
+            bool isNOtRepeated = _context.Appointment
+                                            .Where(ap => ap.AppoitmentNumber == appointmentNumber)
+                                            .IsNullOrEmpty();
+
+          
+            return Json(isNOtRepeated);
+        }
     }
+    
+    
+       
+    
 }
