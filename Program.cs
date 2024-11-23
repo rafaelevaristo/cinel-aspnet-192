@@ -35,6 +35,20 @@ builder.Services.AddDefaultIdentity<IdentityUser>(
     )
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddAuthorization(
+    options => {
+        options.AddPolicy(MVCConstants.POLICIES.APP_POLICY.NAME, policy => policy.RequireRole(MVCConstants.POLICIES.APP_POLICY.POLICY_ROLES));
+        options.AddPolicy(MVCConstants.POLICIES.APP_POLICY_EDITABLE_CRUD.NAME, policy => policy.RequireRole(MVCConstants.POLICIES.APP_POLICY_EDITABLE_CRUD.POLICY_ROLES));
+        options.AddPolicy(MVCConstants.POLICIES.APP_POLICY_ADMIN.NAME, policy => policy.RequireRole(MVCConstants.POLICIES.APP_POLICY_ADMIN.POLICY_ROLES));
+        
+    }
+
+
+
+);
+
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddControllersWithViews();

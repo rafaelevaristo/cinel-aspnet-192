@@ -10,10 +10,12 @@ using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 
+using static mvc.MVCConstants.POLICIES;
+
 
 namespace mvc.Controllers
 {
-    [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE},{MVCConstants.ROLES.DRIVER}")]
+    [Authorize(Policy = APP_POLICY.NAME)]
     public class AppointmentController : Controller
     {
         private readonly ILogger<AppointmentController> _logger;
@@ -64,8 +66,8 @@ namespace mvc.Controllers
         }
 
 
-        [HttpGet]
-        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
+        [HttpGet]        
+        [Authorize(Policy = APP_POLICY_EDITABLE_CRUD.NAME)]
         public IActionResult Create()
         {
             ViewBag.ClientList = new SelectList(_context.Clients, "ID", "Name");
@@ -75,7 +77,7 @@ namespace mvc.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
+        [Authorize(Policy = APP_POLICY_EDITABLE_CRUD.NAME)]
         public IActionResult Create(Appointment appointment)
         {
             if (ModelState.IsValid)
@@ -109,7 +111,7 @@ namespace mvc.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
+        [Authorize(Policy = APP_POLICY_EDITABLE_CRUD.NAME)]
         public IActionResult Edit(int ID)
         {
             Appointment? appointment = _context.Appointment.Find(ID);
@@ -128,7 +130,7 @@ namespace mvc.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
+        [Authorize(Policy = APP_POLICY_EDITABLE_CRUD.NAME)]
         public IActionResult Edit(Appointment appointmentToUpdate)
         {
 
@@ -151,7 +153,7 @@ namespace mvc.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
+        [Authorize(Policy = APP_POLICY_ADMIN.NAME)]
         public IActionResult DeleteConfirm(int ID)
         {
 
@@ -172,8 +174,8 @@ namespace mvc.Controllers
         }
 
 
-        [HttpGet, ActionName("Delete")]
-        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN}")]
+        [HttpGet, ActionName("Delete")]        
+        [Authorize(Policy = APP_POLICY_ADMIN.NAME)]
         public IActionResult DeleteView(int ID)
         {
 
@@ -190,7 +192,7 @@ namespace mvc.Controllers
         }
 
         [AcceptVerbs("GET","POST")]
-        [Authorize(Roles=$"{MVCConstants.ROLES.ADMIN},{MVCConstants.ROLES.ADMINISTRATIVE}")]
+        [Authorize(Policy = APP_POLICY_EDITABLE_CRUD.NAME)]
         public IActionResult IsNotRepeatedAppointmentNumber(string appointmentNumber)
         {
 

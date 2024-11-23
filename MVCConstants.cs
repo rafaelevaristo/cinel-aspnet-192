@@ -31,6 +31,39 @@ namespace mvc
             public const string ADMIN = "ADMIN";
             public const string DRIVER = "DRIVER";
             public const string ADMINISTRATIVE = "ADMINISTRATIVE";
+
         }
+
+        public readonly struct POLICIES
+        {
+            public readonly struct APP_POLICY
+            {
+                public const string NAME = "APP_POLICY";
+                public static readonly string[] POLICY_ROLES = { 
+                   ROLES.ADMINISTRATIVE,
+                   ROLES.ADMIN,
+                   ROLES.DRIVER
+                 };
+            }
+
+            public readonly struct APP_POLICY_EDITABLE_CRUD
+            {
+                public const string NAME = "APP_POLICY_EDITABLE_CRUD";
+                public static readonly string[] POLICY_ROLES = { 
+                   ROLES.ADMINISTRATIVE,
+                   ROLES.ADMIN
+                 };
+            }
+
+            public readonly struct APP_POLICY_ADMIN
+            {
+                public const string NAME = "APP_POLICY_ADMIN";
+                public static readonly string[] POLICY_ROLES = { 
+                   ROLES.ADMIN
+                   
+                 };
+            }
+
+        }           
     }
 }
