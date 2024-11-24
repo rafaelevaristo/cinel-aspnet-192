@@ -10,6 +10,8 @@ using System.Globalization;
 using mvc;
 using SQLitePCL;
 using mvc.Data.SeedDataBase;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using MVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,6 +91,8 @@ builder.Services
         ProgressBar = true,
         PositionClass = ToastPositions.TopRight
     });
+
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 

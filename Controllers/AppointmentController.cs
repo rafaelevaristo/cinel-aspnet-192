@@ -11,6 +11,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 
 using static mvc.MVCConstants.POLICIES;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Text;
 
 
 namespace mvc.Controllers
@@ -22,17 +25,20 @@ namespace mvc.Controllers
         private readonly IToastNotification _toastNotification;
 
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
         private readonly IHtmlLocalizer<Resource> _sharedLocalizer ;
 
         public AppointmentController(ILogger<AppointmentController> logger,
                                     IToastNotification toastNotification,
                                     IHtmlLocalizer<Resource> localizer,
+                                    IEmailSender emailSender,
                                     ApplicationDbContext context)
         {
             _logger = logger;
             _toastNotification = toastNotification;
             _sharedLocalizer = localizer;
             _context = context;
+            _emailSender = emailSender;
         }
 
 
@@ -93,6 +99,9 @@ namespace mvc.Controllers
 
                     _toastNotification.AddSuccessToastMessage($"Successfully schedule Appointment # {appointment.AppoitmentNumber}");
 
+                    //TODO: send email when schedule some appointment.
+                    //this.SendEmail (appointment);
+
                     return RedirectToAction("Index");
                 }
                 else
@@ -108,6 +117,7 @@ namespace mvc.Controllers
             ViewBag.ErrorMessage = _sharedLocalizer["ErrorAppointementDataNotValid"];
 
             return View(appointment);
+            
         }
 
         [HttpGet]
@@ -203,9 +213,43 @@ namespace mvc.Controllers
           
             return Json(isNOtRepeated);
         }
+        
+        private bool SendEmail (Appointment appointment) {
+            
+            Client? client = _context.Clients.Find(appointment.ClientID);
+            Staff? staff = _context.Staff
+                                        .Include(s => s.StaffNumber)
+                                        .Where(s => s.ID == appointment.StaffID)
+                                        .Single();
+                
+            if (client == null || staff == null)
+            {
+                return false;
+            }
+
+            var culture = Thread.CurrentThread.CurrentUICulture;
+
+            string template = System.IO.File.ReadAllText(
+                Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "EmailTemplates",
+                    $"create_appointment.{culture.Name}.html"
+                )
+            );
+
+            StringBuilder htmlBody = new StringBuilder(template);
+            htmlBody.Replace("##CUSTOMER_NAME##", client.Name);
+            htmlBody.Replace("##APPOINTMENT_DATE##", appointment.Date.ToShortDateString());
+            htmlBody.Replace("##APPOINTMENT_TIME##", appointment.Time.ToShortTimeString());
+            htmlBody.Replace("##STAFF_ROLE##", staff.StaffNumber);
+            htmlBody.Replace("##STAFF_NAME##", staff.Name);
+
+
+
+            return false;
+        }
+    
     }
-    
-    
-       
-    
+
+
 }
