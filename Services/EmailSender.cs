@@ -10,7 +10,7 @@ namespace MVC.Services
         {
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
             {
-                Credentials = new NetworkCredential("rocinanterompante@gmail.com", "RocinanteDeRompante!100"),
+                Credentials = new NetworkCredential("rocinanterompante@gmail.com", "keya kegd ohfy fakn"),
                 Port = 587,
                 EnableSsl = true,
             };

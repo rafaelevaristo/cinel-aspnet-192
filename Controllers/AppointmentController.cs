@@ -99,8 +99,8 @@ namespace mvc.Controllers
 
                     _toastNotification.AddSuccessToastMessage($"Successfully schedule Appointment # {appointment.AppoitmentNumber}");
 
-                    //TODO: send email when schedule some appointment.
-                    //this.SendEmail (appointment);
+                    
+                    this.SendEmail (appointment);
 
                     return RedirectToAction("Index");
                 }
@@ -209,16 +209,106 @@ namespace mvc.Controllers
             bool isNOtRepeated = _context.Appointment
                                             .Where(ap => ap.AppoitmentNumber == appointmentNumber)
                                             .IsNullOrEmpty();
-
           
             return Json(isNOtRepeated);
         }
+
+        public IActionResult TomorrowsAppointments()
+        {
+            var tomorrowsAppointments = _context.Appointment                                                
+                                                .Include(appointment => appointment.Client)
+                                                .Where(appointment => appointment.Date ==  DateOnly.FromDateTime(DateTime.Today.AddDays(1).Date))
+                                                .ToList();
+            return View(tomorrowsAppointments);
+        }
+
+        public IActionResult NextWeekAppointments()
+        {
+            var (startDate, endDate) = GetNextWeeksDates();
+
+            ViewBag.StartDate = startDate;
+            ViewBag.EndDate = endDate;
+            List<Appointment> nextWeekAppointments = GetAppointmentsBetweenDates(startDate, endDate);
+            return View(nextWeekAppointments);
+        }
+
+        private List<Appointment> GetAppointmentsBetweenDates(DateOnly startDate, DateOnly endDate)
+        {
+            return _context.Appointment      
+                            .Include(appointment => appointment.Staff)                      
+                            .Include(appointment => appointment.Client)
+                            .Where(appointment => appointment.Date >= startDate && appointment.Date <= endDate)
+                            .ToList();
+        }
+
+        private static   (DateOnly inicio, DateOnly fim) GetNextWeeksDates()
+        {
+                // Obtém a data atual
+                DateTime hoje = DateTime.Now;
+
+                // Calcula o próximo domingo (início da próxima semana)
+                int diasAteDomingo = ((int)DayOfWeek.Sunday - (int)hoje.DayOfWeek + 7) % 7;
+                DateTime proximoDomingo = hoje.AddDays(diasAteDomingo);
+
+                // Define a data de início e fim da próxima semana
+                DateTime inicioProximaSemana = proximoDomingo;
+                DateTime fimProximaSemana = proximoDomingo.AddDays(6);
+                // Retorna as datas como uma tupla
+                return (DateOnly.FromDateTime(inicioProximaSemana.Date),DateOnly.FromDateTime(fimProximaSemana.Date));
+        }
+        public IActionResult EmailReminderNextWeeksAppointments()
+        {
+            // Obter data de início e fim da próxima semana
+            var (startDate, endDate) = GetNextWeeksDates();
+
+
+
+            // Obter as consultas da próxima semana
+            ViewBag.StartDate = startDate;
+            ViewBag.EndDate = endDate;
+            List<Appointment> nextWeekAppointments = GetAppointmentsBetweenDates(startDate, endDate);
+
+
+            // Obter a língua e o respectivo template de e-mail
+            var culture = Thread.CurrentThread.CurrentUICulture;
+
+            string template = System.IO.File.ReadAllText(
+                Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "EmailTemplates",
+                    $"next_week_appointment.{culture.Name}.html"
+                )
+            );
+
+            // Adaptar o template a cada consulta e enviar o e-mail
+            foreach(var appointment in nextWeekAppointments)
+            {
+                StringBuilder htmlBody = new StringBuilder(template);
+                htmlBody.Replace("##CUSTOMER_NAME##", appointment.Client.Name);
+                htmlBody.Replace("##APPOINTMENT_DATE##", appointment.Date.ToShortDateString());
+                htmlBody.Replace("##APPOINTMENT_TIME##", appointment.Time.ToShortTimeString());
+               
+                htmlBody.Replace("##STAFF_NAME##", appointment.Staff.Name);
+
+
+                _emailSender.SendEmailAsync(appointment.Client.Email, "Reminder of Scheduled Appointment",
+                    htmlBody.ToString());
+
+
+            }
+            
+            _toastNotification.AddSuccessToastMessage($"{nextWeekAppointments.Count} Emails successfully sent.");
+
+
+            return RedirectToAction(nameof(NextWeekAppointments));
+        }
+
         
         private bool SendEmail (Appointment appointment) {
             
             Client? client = _context.Clients.Find(appointment.ClientID);
             Staff? staff = _context.Staff
-                                        .Include(s => s.StaffNumber)
+                                        //.Include(s => s.StaffNumber)
                                         .Where(s => s.ID == appointment.StaffID)
                                         .Single();
                 
@@ -244,7 +334,8 @@ namespace mvc.Controllers
             htmlBody.Replace("##STAFF_ROLE##", staff.StaffNumber);
             htmlBody.Replace("##STAFF_NAME##", staff.Name);
 
-
+            _emailSender.SendEmailAsync(client.Email, "Appointment Scheduled",
+                    htmlBody.ToString());
 
             return false;
         }

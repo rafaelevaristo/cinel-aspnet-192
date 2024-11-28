@@ -1,0 +1,56 @@
+@model IEnumerable<mvc.Models.Appointment>
+@{
+    bool dateExists = ViewBag.StartDate != null;
+}
+
+<h1>Next Week's Appointments  
+        @if (dateExists)
+        {
+            <span>
+                (@ViewBag.StartDate.ToShortDateString() - @ViewBag.EndDate.ToShortDateString())
+            </span>
+        }
+</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<p>
+    <a asp-action="TomorrowsAppointments" class="btn btn-primary">Check tomorrow's Appointments</a>
+    
+    @if (User.IsInRole(MVCConstants.ROLES.ADMIN))
+    {
+        <a asp-action="EmailReminderNextWeeksAppointments" class="btn btn-warning">Send Reminder E-mail</a>
+    }
+
+</p>
+
+@(
+Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(ap => ap.AppoitmentNumber).Titled("Ap. Number");
+            columns.Add(ap => ap.Date).Titled("Date").Formatted("{0:dd-MM-yyyy}")
+                                                     .Filterable(GridFilterType.Double);
+            columns.Add(ap => ap.Time).Titled("Time").Formatted("{0:t}");
+            columns.Add(ap => ap.Client.Name).Titled("Customer");
+            columns.Add(ap => ap.Staff.Name).Titled("Staff");            
+            columns.Add(ap => ap.IsDone).Titled("Done?")
+                .RenderedAs(ap => (ap.IsDone == true ? "Yes" : "No"))
+                .UsingFilterOptions(new[]
+                {
+                    new SelectListItem{ Value = "true", Text = "Yes" },
+                    new SelectListItem{ Value = "false", Text = "No" }
+                });
+
+            columns.Add(ap =>
+                Html.ActionLink("Edit", "Edit", new { id = ap.ID }, new {@class="btn btn-primary"}));
+            columns.Add(ap =>
+                Html.ActionLink("Delete", "Delete", new { id = ap.ID }, new { @class = "btn btn-primary" }));
+        })
+        .Filterable()
+        .Sortable()
+        
+)
